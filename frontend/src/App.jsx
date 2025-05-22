@@ -70,7 +70,10 @@ const App = () => {
         }
       />
 
-      <Route path="/" element={<Layout />} />
+      <Route
+        path="/"
+        element={<Layout user={currentUser} onLogout={handleLogout} />}
+      />
     </Routes>
   );
 };

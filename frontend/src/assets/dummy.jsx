@@ -379,8 +379,8 @@ export const TI_CLASSES = {
     "flex items-center gap-1.5 text-xs text-gray-400 whitespace-nowrap",
 };
 // APP.JSX
-const user = {
-  avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(
-    data.name || "User"
-  )}&background=random`,
-};
+// const user = {
+//   avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(
+//     data.name || "User"
+//   )}&background=random`,
+// };
