@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import { Outlet } from "react-router-dom";
-import { TrendingUp, Circle, Clock } from "lucide-react";
+import { TrendingUp, Circle, Clock, Zap } from "lucide-react";
 import axios from "axios";
 
 const Layout = ({ user, onLogout }) => {

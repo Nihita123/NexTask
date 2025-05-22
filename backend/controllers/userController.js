@@ -71,7 +71,7 @@ export async function loginUser(req, res) {
     }
     const token = createToken(user._id);
     res.json({
-      sucess: true,
+      success: true,
       token,
       user: { id: user._id, name: user.name, email: user.email },
     });
