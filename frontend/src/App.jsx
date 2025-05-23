@@ -4,6 +4,9 @@ import { Outlet, replace, Route, Routes, useNavigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
+import Dashboard from "./pages/Dashboard";
+import PendingPage from "./pages/pendingPage";
+import CompletePage from "./pages/completePage";
 
 const App = () => {
   const navigate = useNavigate();
@@ -38,11 +41,11 @@ const App = () => {
     navigate("/login", { replace: true });
   };
 
-  const protectedLayout = () => {
+  const ProtectedLayout = () => (
     <Layout user={currentUser} onLogout={handleLogout}>
       <Outlet />
-    </Layout>;
-  };
+    </Layout>
+  );
 
   return (
     <Routes>
@@ -71,8 +74,17 @@ const App = () => {
       />
 
       <Route
-        path="/"
-        element={<Layout user={currentUser} onLogout={handleLogout} />}
+        element={
+          currentUser ? <ProtectedLayout /> : <navigate to="/login" replace />
+        }
+      >
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/pending" element={<PendingPage />} />
+        <Route path="/complete" element={<CompletePage />} />
+      </Route>
+      <Route
+        path="*"
+        element={<navigate to={currentUser ? "/" : "/login"} replace />}
       />
     </Routes>
   );
