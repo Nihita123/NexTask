@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "./components/Navbar";
-import { Outlet, replace, Route, Routes, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
@@ -42,61 +41,33 @@ const App = () => {
     navigate("/login", { replace: true });
   };
 
-  const ProtectedLayout = () => (
-    <Layout user={currentUser} onLogout={handleLogout}>
-      <Outlet />
-    </Layout>
-  );
+  // Wrapper for protected routes
+  const ProtectedRoute = ({ children }) => {
+    const token = localStorage.getItem("token");
+    return token ? children : <Navigate to="/login" replace />;
+  };
 
   return (
     <Routes>
-      <Route
-        path="/login"
-        element={
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <Login
-              onSubmit={handleAuthSubmit}
-              onSwitchMode={() => navigate("/signup")}
-            />
-          </div>
-        }
-      />
+      <Route path="/login" element={<Login onSubmit={handleAuthSubmit} />} />
+      <Route path="/signup" element={<SignUp onSubmit={handleAuthSubmit} />} />
 
       <Route
-        path="/signup"
+        path="/"
         element={
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <SignUp
-              onSubmit={handleAuthSubmit}
-              onSwitchMode={() => navigate("/login")}
-            />
-          </div>
-        }
-      />
-
-      <Route
-        element={
-          currentUser ? <ProtectedLayout /> : <navigate to="/login" replace />
+          <ProtectedRoute>
+            <Layout user={currentUser} onLogout={handleLogout} />
+          </ProtectedRoute>
         }
       >
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/pending" element={<PendingPage />} />
-        <Route path="/complete" element={<CompletePage />} />
-        <Route
-          path="/profile"
-          element={
-            <Profile
-              user={currentUser}
-              setCurrentUser={setCurrentUser}
-              onLogout={handleLogout}
-            />
-          }
-        />
+        <Route index element={<Dashboard />} />
+        <Route path="pending" element={<PendingPage />} />
+        <Route path="completed" element={<CompletePage />} />
+        <Route path="profile" element={<Profile user={currentUser} />} />
       </Route>
-      <Route
-        path="*"
-        element={<navigate to={currentUser ? "/" : "/login"} replace />}
-      />
+
+      {/* Catch-all route */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

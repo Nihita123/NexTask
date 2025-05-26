@@ -18,17 +18,20 @@ const Layout = ({ user, onLogout }) => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("no auth token found");
 
-      const data = await axios.get("http://localhost:5000/api/tasks/gp", {
+      const res = await axios.get("http://localhost:5000/api/tasks/gp", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      const arr = Array.isArray(data)
-        ? data
-        : Array.isArray(data?.tasks)
-        ? data.tasks
-        : Array.isArray(data?.data)
-        ? data.data
+      const arr = Array.isArray(res.data)
+        ? res.data
+        : Array.isArray(res.data?.tasks)
+        ? res.data.tasks
+        : Array.isArray(res.data?.data)
+        ? res.data.data
         : [];
+
+      console.log("Raw response from API:", res);
+
       setTasks(arr);
     } catch (err) {
       console.error(err);

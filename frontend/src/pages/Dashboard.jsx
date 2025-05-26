@@ -39,8 +39,17 @@ const Dashboard = () => {
   const [selectedTask, setSelectTasks] = useState(null);
   const [filter, setFilter] = useState("all");
 
-  const stats = useMemo(
-    () => ({
+  const stats = useMemo(() => {
+    if (!Array.isArray(tasks))
+      return {
+        total: 0,
+        lowPriority: 0,
+        mediumPriority: 0,
+        highPriority: 0,
+        completed: 0,
+      };
+
+    return {
       total: tasks.length,
       lowPriority: tasks.filter((t) => t.priority?.toLowerCase() === "low")
         .length,
@@ -56,33 +65,36 @@ const Dashboard = () => {
           (typeof t.completed === "string" &&
             t.completed.toLowerCase() === "yes")
       ).length,
-    }),
-    [tasks]
-  );
+    };
+  }, [tasks]);
 
-  //FILTER TASKS
-  const filteredTasks = useMemo(
-    () =>
-      tasks.filter((task) => {
-        const dueDate = new Date(task.dueDate);
-        const today = new Date();
-        const nextWeek = new Date(today);
-        nextWeek.setDate(today.getDate() + 7);
-        switch (filter) {
-          case "today":
-            return dueDate.toDateString() === today.toDateString();
-          case "week":
-            return dueDate >= today && dueDate <= nextWeek;
-          case "high":
-          case "medium":
-          case "low":
-            return task.priority?.toLowerCase() === filter;
-          default:
-            return true;
-        }
-      }),
-    [tasks, filter]
-  );
+  console.log("All tasks:", tasks);
+  console.log("Filter selected:", filter);
+
+  const filteredTasks = useMemo(() => {
+    if (!Array.isArray(tasks)) return [];
+    const today = new Date();
+    const nextWeek = new Date(today);
+    nextWeek.setDate(today.getDate() + 7);
+
+    return tasks.filter((task) => {
+      const dueDate = new Date(task.dueDate);
+      switch (filter) {
+        case "today":
+          return dueDate.toDateString() === today.toDateString();
+        case "week":
+          return dueDate >= today && dueDate <= nextWeek;
+        case "high":
+        case "medium":
+        case "low":
+          return task.priority?.toLowerCase() === filter;
+        default:
+          return true;
+      }
+    });
+  }, [tasks, filter]);
+
+  console.log("Filtered tasks:", filteredTasks);
 
   // SAVING TASKS
   const handleTaskSave = useCallback(
@@ -242,7 +254,7 @@ const Dashboard = () => {
         isOpen={showModal || selectedTask}
         onClose={() => {
           setShowModal(false);
-          selectedTask(null);
+          setSelectTasks(null);
         }}
         tasktoEdit={selectedTask}
         onSave={handleTaskSave}
