@@ -1,6 +1,14 @@
 import React, { useMemo, useState } from "react";
 
-import { Clock, Filter, ListChecks, Plus } from "lucide-react";
+import {
+  Clock,
+  Filter,
+  ListChecks,
+  Plus,
+  SortDesc,
+  SortAsc,
+  Award,
+} from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import TaskItem from "../components/TaskItem";
 import TaskModal from "../components/TaskModal";

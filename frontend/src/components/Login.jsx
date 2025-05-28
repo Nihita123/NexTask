@@ -86,94 +86,100 @@ const Login = ({ onSubmit, onSwitchMode }) => {
   ];
 
   return (
-    <div className="max-w-md bg-white w-full shado-lg border border-purple-100 rounded-xl p-8">
-      <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
+    <div className="min-h-screen flex items-center justify-center bg-black">
+      <div className="max-w-md bg-white w-full shadow-lg border border-pink-100 rounded-xl p-8">
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar
+        />
 
-      <div className="mb-6 text-center">
-        <div className="w-16 h-16 bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-full mx-auto flex items-center justify-center mb-4">
-          <LogIn className="w-8 h-8 text-white" />
+        <div className="mb-6 text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-pink-400 to-pink-500 rounded-full mx-auto flex items-center justify-center mb-4">
+            <LogIn className="w-8 h-8 text-white" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800">Welcome back!</h2>
+          <p className="text-gray-500 text-sm mt-1">
+            Sign in to continue to NexTask
+          </p>
         </div>
-        <h2 className="text-2xl font-bold text-gray-800 ">Welcome back!</h2>
-        <p className="text-gray-500 text-sm mt-1 ">
-          Sign in to continue to NexTask
-        </p>
-      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {fields.map(({ name, type, placeholder, icon: Icon, isPassword }) => (
-          <div
-            key={name}
-            className="flex items-center border border-purple-100 rounded-lg px-3 py-2.5 focus-within:ring-2 focus-within:ring-purple-500 focus-within:border-purple-500 transition-all duration-200"
-          >
-            <Icon className="text-purple-500 w-5 h-5 mr-2" />
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {fields.map(({ name, type, placeholder, icon: Icon, isPassword }) => (
+            <div
+              key={name}
+              className="flex items-center border border-pink-200 rounded-lg px-3 py-2.5 focus-within:ring-2 focus-within:ring-pink-400 focus-within:border-pink-400 transition-all duration-200"
+            >
+              <Icon className="text-pink-400 w-5 h-5 mr-2" />
+              <input
+                type={type}
+                placeholder={placeholder}
+                value={formData[name]}
+                onChange={(e) =>
+                  setFormData({ ...formData, [name]: e.target.value })
+                }
+                className="w-full focus:outline-none text-sm text-gray-700"
+                required
+              />
+
+              {isPassword && (
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="ml-2 text-gray-400 hover:text-pink-400 transition-colors"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
+              )}
+            </div>
+          ))}
+          <div className="flex items-center">
             <input
-              type={type}
-              placeholder={placeholder}
-              value={formData[name]}
-              onChange={(e) =>
-                setFormData({ ...formData, [name]: e.target.value })
-              }
-              className="w-full focus:outline-none text-sm text-gray-700 "
+              type="checkbox"
+              id="rememberMe"
+              checked={rememberMe}
+              onChange={() => setRememberMe(!rememberMe)}
+              className="h-4 w-4 text-pink-500 focus:ring-pink-400 border-gray-300 rounded"
               required
             />
-
-            {isPassword && (
-              <button
-                type="button"
-                onClick={() => setShowPassword((prev) => !prev)}
-                className="ml-2 text-gray-500 hover:text-purple-500 transition-colors"
-              >
-                {showPassword ? (
-                  <EyeOff className="w-5 h-5" />
-                ) : (
-                  <Eye className="w-5 h-5" />
-                )}
-              </button>
-            )}
+            <label
+              htmlFor="rememberMe"
+              className="ml-2 block text-sm text-gray-700"
+            >
+              Remember Me
+            </label>
           </div>
-        ))}
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            id="rememberMe"
-            checked={rememberMe}
-            onChange={() => setRememberMe(!rememberMe)}
-            className="h-4 w-4 text-purple-500 focus:ring-purple-400 border-gray-300 rounded"
-            required
-          />
-          <label
-            htmlFor="rememberMe"
-            className="ml-2 block text-sm text-gray-700"
+
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-pink-400 to-pink-300 text-white text-sm font-semibold py-2.5 rounded-lg hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2"
+            disabled={loading}
           >
-            Remember Me
-          </label>
-        </div>
+            {loading ? (
+              "logging in..."
+            ) : (
+              <>
+                <LogIn className="w-4 h-4" /> Login
+              </>
+            )}
+          </button>
+        </form>
 
-        <button
-          type="submit"
-          className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white text-sm font-semibold py-2.5 rounded-lg hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2"
-          disabled={loading}
-        >
-          {loading ? (
-            "logging in..."
-          ) : (
-            <>
-              <LogIn className="w-4 h-4" /> Login
-            </>
-          )}
-        </button>
-      </form>
-
-      <p className="text-center text-sm text-gray-600 mt-6">
-        Don't have an account?{" "}
-        <button
-          type="button"
-          className="text-purple-600 hover:text-purple-700 hover:underline font-medium transition-colors"
-          onClick={handleSwitchMode}
-        >
-          Sign Up
-        </button>
-      </p>
+        <p className="text-center text-sm text-gray-600 mt-6">
+          Don't have an account?{" "}
+          <button
+            type="button"
+            className="text-pink-500 hover:text-pink-600 hover:underline font-medium transition-colors"
+            onClick={handleSwitchMode}
+          >
+            Sign Up
+          </button>
+        </p>
+      </div>
     </div>
   );
 };

@@ -4,8 +4,8 @@ import Layout from "./components/Layout";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Dashboard from "./pages/Dashboard";
-import PendingPage from "./pages/pendingPage";
-import CompletePage from "./pages/completePage";
+import PendingPage from "./pages/PendingPage.jsx";
+import CompletePage from "./pages/CompletePage.jsx";
 import Profile from "./components/Profile";
 
 const App = () => {
@@ -62,7 +62,8 @@ const App = () => {
       >
         <Route index element={<Dashboard />} />
         <Route path="pending" element={<PendingPage />} />
-        <Route path="completed" element={<CompletePage />} />
+        <Route path="complete" element={<CompletePage />} />
+
         <Route path="profile" element={<Profile user={currentUser} />} />
       </Route>
 
