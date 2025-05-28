@@ -1,16 +1,15 @@
-import { UserPlus } from "lucide-react";
+import { UserPlus, User, Mail } from "lucide-react";
 import React, { useState } from "react";
 import axios from "axios";
-import {
-  BUTTONCLASSES,
-  FIELDS,
-  Inputwrapper,
-  MESSAGE_ERROR,
-  MESSAGE_SUCCESS,
-} from "../assets/dummy";
 
 const API_URL = "http://localhost:5000";
 const INITIAL_FORM = { name: "", email: "", password: "" };
+
+const FIELDS = [
+  { name: "name", type: "text", placeholder: "Full Name", icon: User },
+  { name: "email", type: "email", placeholder: "Email", icon: Mail },
+  { name: "password", type: "password", placeholder: "Password", icon: Lock },
+];
 
 const SignUp = ({ onSwitchMode }) => {
   const [formData, setFormData] = useState(INITIAL_FORM);
@@ -59,7 +58,9 @@ const SignUp = ({ onSwitchMode }) => {
       {message.text && (
         <div
           className={
-            message.type === "success" ? MESSAGE_SUCCESS : MESSAGE_ERROR
+            message.type === "success"
+              ? "bg-green-50 text-green-600 p-3 rounded-lg text-sm mb-4 border border-green-100"
+              : "bg-red-50 text-red-600 p-3 rounded-lg text-sm mb-4 border border-red-100"
           }
         >
           {message.text}
@@ -67,7 +68,10 @@ const SignUp = ({ onSwitchMode }) => {
       )}
       <form onSubmit={handleSubmit} className="space-y-4">
         {FIELDS.map(({ name, type, placeholder, icon: Icon }) => (
-          <div key={name} className={Inputwrapper}>
+          <div
+            key={name}
+            className="flex items-center border border-purple-100 rounded-lg px-3 py-2.5 focus-within:ring-2 focus-within:ring-purple-500 focus-within:border-purple-500 transition-all duration-200"
+          >
             <Icon className="text-purple-500 w-5 h-5 mr-2" />
             <input
               type={type}
@@ -82,7 +86,11 @@ const SignUp = ({ onSwitchMode }) => {
           </div>
         ))}
 
-        <button type="submit" className={BUTTONCLASSES} disabled={loading}>
+        <button
+          type="submit"
+          className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white text-sm font-semibold py-2.5 rounded-lg hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2"
+          disabled={loading}
+        >
           {loading ? (
             "Signing up ... "
           ) : (

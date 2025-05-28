@@ -1,9 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  baseControlClasses,
-  DEFAULT_TASK,
-  priorityStyles,
-} from "../assets/dummy";
+
 import {
   AlignLeft,
   Calendar,
@@ -15,6 +11,21 @@ import {
 } from "lucide-react";
 
 const API_BASE = "http://localhost:5000/api/tasks";
+
+const DEFAULT_TASK = {
+  title: "",
+  description: "",
+  priority: "Low",
+  dueDate: "",
+  completed: "No",
+  id: null,
+};
+
+const priorityStyles = {
+  Low: "bg-green-100 text-green-700 border-green-200",
+  Medium: "bg-purple-100 text-purple-700 border-purple-200",
+  High: "bg-fuchsia-100 text-fuchsia-700 border-fuchsia-200",
+};
 
 const TaskModal = ({ isOpen, onClose, tasktoEdit, onSave, onLogout }) => {
   const [taskData, setTaskData] = useState(DEFAULT_TASK);
@@ -148,7 +159,7 @@ const TaskModal = ({ isOpen, onClose, tasktoEdit, onSave, onLogout }) => {
               rows="3"
               onChange={handleChange}
               value={taskData.description}
-              className={baseControlClasses}
+              className="w-full px-4 py-2.5 border border-purple-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm"
               placeholder="Add details about your task"
             />
           </div>
@@ -162,7 +173,7 @@ const TaskModal = ({ isOpen, onClose, tasktoEdit, onSave, onLogout }) => {
                 name="priority"
                 value={taskData.priority}
                 onChange={handleChange}
-                className={`${baseControlClasses} ${
+                className={`"w-full px-4 py-2.5 border border-purple-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm" ${
                   priorityStyles[taskData.priority]
                 }`}
               >
@@ -183,7 +194,7 @@ const TaskModal = ({ isOpen, onClose, tasktoEdit, onSave, onLogout }) => {
                 min={today}
                 value={taskData.dueDate}
                 onChange={handleChange}
-                className={baseControlClasses}
+                className="w-full px-4 py-2.5 border border-purple-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm"
               />
             </div>
           </div>

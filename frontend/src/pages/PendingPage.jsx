@@ -1,11 +1,24 @@
 import React, { useMemo, useState } from "react";
-import { layoutClasses, SORT_OPTIONS } from "../assets/dummy";
+
 import { Clock, Filter, ListChecks, Plus } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import TaskItem from "../components/TaskItem";
 import TaskModal from "../components/TaskModal";
 
+const SORT_OPTIONS = [
+  { id: "newest", label: "Newest", icon: <SortDesc className="w-3 h-3" /> },
+  { id: "oldest", label: "Oldest", icon: <SortAsc className="w-3 h-3" /> },
+  { id: "priority", label: "Priority", icon: <Award className="w-3 h-3" /> },
+];
+
 const API_BASE = "http://localhost:5000/api/tasks";
+
+const tabButton = (active) =>
+  `px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-1.5 ${
+    active
+      ? "bg-white text-purple-700 shadow-sm border border-purple-100"
+      : "text-gray-600 hover:text-purple-700 hover:bg-purple-100/50"
+  }`;
 
 const PendingPage = () => {
   const { tasks = [], refreshTasks } = useOutletContext();
@@ -39,8 +52,8 @@ const PendingPage = () => {
   }, [tasks, sortBy]);
 
   return (
-    <div className={layoutClasses.container}>
-      <div className={layoutClasses.headerWrapper}>
+    <div className="p-6 min-h-screen overflow-hidden">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
             <ListChecks className="text-purple-500" /> Pending tasks
@@ -51,7 +64,7 @@ const PendingPage = () => {
           </p>
         </div>
 
-        <div className={layoutClasses.sortBox}>
+        <div className="flex items-center justify-between bg-white p-3 rounded-xl shadow-sm border border-purple-100 w-full md:w-auto">
           <div className="flex items-center gap-2 text-gray-700 font-medium">
             <Filter className="w-4 h-4 text-purple-500" />
             <span className="text-sm">Sort by:</span>
@@ -60,18 +73,18 @@ const PendingPage = () => {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className={layoutClasses.select}
+            className="px-3 py-2 border border-purple-100 rounded-lg focus:ring-2 focus:ring-purple-500 md:hidden text-sm"
           >
             <option value="newest">Newest first</option>
             <option value="newest">Oldest first</option>
             <option value="newest">By priority</option>
           </select>
-          <div className={layoutClasses.tabWrapper}>
+          <div className="hidden md:flex space-x-1 bg-purple-50 p-1 rounded-lg ml-3">
             {SORT_OPTIONS.map((opt) => (
               <button
                 key={opt.id}
                 onClick={() => setSortBy(opt.id)}
-                className={layoutClasses.tabButton(sortBy === opt.id)}
+                className={tabButton(sortBy === opt.id)}
               >
                 {opt.icon} {opt.label}
               </button>
@@ -80,7 +93,10 @@ const PendingPage = () => {
         </div>
       </div>
 
-      <div className={layoutClasses.addBox} onClick={() => setShowModal(true)}>
+      <div
+        className="hidden md:block p-5 border-2 border-dashed border-purple-200 rounded-xl hover:border-purple-400 transition-colors cursor-pointer mb-6 bg-purple-50/50 group"
+        onClick={() => setShowModal(true)}
+      >
         <div className="flex items-center justify-center gap-3 text-gray-500 group-hover:text-purple-600 transition-colors">
           <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
             <Plus className="text-purple-500" size={18} />
@@ -91,9 +107,9 @@ const PendingPage = () => {
 
       <div className="space-y-4">
         {sortedPendingTasks.length === 0 ? (
-          <div className={layoutClasses.emptyState}>
+          <div className="p-8 bg-white rounded-xl shadow-sm border border-purple-100 text-center">
             <div className="max-w-xs mx-auto py-6">
-              <div className={layoutClasses.emptyIconBg}>
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Clock className="w-8 h-8 text-purple-500" />
               </div>
 
@@ -105,7 +121,7 @@ const PendingPage = () => {
               </p>
               <button
                 onClick={() => setShowModal(true)}
-                className={layoutClasses.emptyBtn}
+                className="px-4 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-lg text-sm font-medium transition-colors"
               >
                 Create New Task
               </button>

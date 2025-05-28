@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import {
-  BACK_BUTTON,
-  DANGER_BTN,
-  FULL_BUTTON,
-  INPUT_WRAPPER,
-  personalFields,
-  SECTION_WRAPPER,
-  securityFields,
-} from "../assets/dummy";
+
 import {
   ChevronLeft,
   Lock,
@@ -16,11 +8,24 @@ import {
   Save,
   Shield,
   UserCircle,
+  User,
+  Mail,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const API_URL = "http://localhost:5000";
+
+const personalFields = [
+  { name: "name", type: "text", placeholder: "Full Name", icon: User },
+  { name: "email", type: "email", placeholder: "Email", icon: Mail },
+];
+
+const securityFields = [
+  { name: "current", placeholder: "Current Password" },
+  { name: "new", placeholder: "New Password" },
+  { name: "confirm", placeholder: "Confirm Password" },
+];
 
 const Profile = ({ setCurrentUser, onLogout }) => {
   const [profile, setProfile] = useState({ name: "", email: "" });
@@ -107,7 +112,10 @@ const Profile = ({ setCurrentUser, onLogout }) => {
     <div className="min-h-screen bg-gray-50">
       <ToastContainer position="top-center" autoClose={3000} />
       <div className="max-w-4xl mx-auto p-6">
-        <button onClick={() => navigate(-1)} className={BACK_BUTTON}>
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center text-gray-600 hover:text-purple-600 mb-8 transition-colors duration-200"
+        >
           <ChevronLeft className="w-5 h-5 mr-1" />
           Back to Dashboard
         </button>
@@ -126,7 +134,7 @@ const Profile = ({ setCurrentUser, onLogout }) => {
           </div>
         </div>
         <div className="grid md:grid-cols-2 gap-8">
-          <section className={SECTION_WRAPPER}>
+          <section className="bg-white rounded-xl shadow-sm border border-purple-100 p-6">
             <div className="flex items-center gap-2 mb-6">
               <UserCircle className="text-purple-500 w-5 h-5" />
               <h2 className="text-xl font-semibold text-gray-800">
@@ -137,7 +145,10 @@ const Profile = ({ setCurrentUser, onLogout }) => {
 
             <form onSubmit={saveProfile} className="space-y-4">
               {personalFields.map(({ name, type, placeholder, icon: Icon }) => (
-                <div key={name} className={INPUT_WRAPPER}>
+                <div
+                  key={name}
+                  className="flex items-center border border-purple-100 rounded-lg px-3 py-2.5 focus-within:ring-2 focus-within:ring-purple-500 focus-within:border-purple-500 transition-all duration-200"
+                >
                   <Icon className="text-purple-500 w-5 h-5 mr-2" />
                   <input
                     type={type}
@@ -151,20 +162,23 @@ const Profile = ({ setCurrentUser, onLogout }) => {
                   />
                 </div>
               ))}
-              <button className={FULL_BUTTON}>
+              <button className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white py-2.5 rounded-lg hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2">
                 <Save className="w-4 h-4" />
                 Save changes
               </button>
             </form>
           </section>
-          <section className={SECTION_WRAPPER}>
+          <section className="bg-white rounded-xl shadow-sm border border-purple-100 p-6">
             <div className="flex items-center gap-2 mb-6">
               <Shield className="text-purple-500 w-5 h-5" />
               <h2 className="text-xl font-semibold text-gray-800">Security</h2>
             </div>
             <form onSubmit={changePassword} className="space-y-4">
               {securityFields.map(({ name, placeholder }) => (
-                <div key={name} className={INPUT_WRAPPER}>
+                <div
+                  key={name}
+                  className="flex items-center border border-purple-100 rounded-lg px-3 py-2.5 focus-within:ring-2 focus-within:ring-purple-500 focus-within:border-purple-500 transition-all duration-200"
+                >
                   <Lock className="text-purple-500 w-5 h-5 mr-2" />
                   <input
                     type="password"
@@ -178,7 +192,7 @@ const Profile = ({ setCurrentUser, onLogout }) => {
                   />
                 </div>
               ))}
-              <button className={FULL_BUTTON}>
+              <button className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white py-2.5 rounded-lg hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2">
                 <Shield className="w-4 h-4" />
                 Change password
               </button>
@@ -188,7 +202,10 @@ const Profile = ({ setCurrentUser, onLogout }) => {
                   <LogOut className="w-4 h-4" />
                   Danger Zone
                 </h3>
-                <button className={DANGER_BTN} onClick={onLogout}>
+                <button
+                  className="w-full text-red-600 border border-red-200 py-2.5 rounded-lg hover:bg-red-50 transition-colors duration-200"
+                  onClick={onLogout}
+                >
                   Logout
                 </button>
               </div>

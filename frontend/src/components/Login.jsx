@@ -1,7 +1,7 @@
 import { Eye, EyeOff, Lock, LogIn, Mail } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { BUTTON_CLASSES, INPUTWRAPPER } from "../assets/dummy";
+
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -101,7 +101,10 @@ const Login = ({ onSubmit, onSwitchMode }) => {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {fields.map(({ name, type, placeholder, icon: Icon, isPassword }) => (
-          <div key={name} className={INPUTWRAPPER}>
+          <div
+            key={name}
+            className="flex items-center border border-purple-100 rounded-lg px-3 py-2.5 focus-within:ring-2 focus-within:ring-purple-500 focus-within:border-purple-500 transition-all duration-200"
+          >
             <Icon className="text-purple-500 w-5 h-5 mr-2" />
             <input
               type={type}
@@ -146,7 +149,11 @@ const Login = ({ onSubmit, onSwitchMode }) => {
           </label>
         </div>
 
-        <button type="submit" className={BUTTON_CLASSES} disabled={loading}>
+        <button
+          type="submit"
+          className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white text-sm font-semibold py-2.5 rounded-lg hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2"
+          disabled={loading}
+        >
           {loading ? (
             "logging in..."
           ) : (

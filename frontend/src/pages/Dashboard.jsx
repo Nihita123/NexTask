@@ -1,29 +1,11 @@
 import React, { useCallback, useMemo, useState } from "react";
-import {
-  ADD_BUTTON,
-  EMPTY_STATE,
-  FILTER_LABELS,
-  FILTER_OPTIONS,
-  FILTER_WRAPPER,
-  HEADER,
-  ICON_WRAPPER,
-  LABEL_CLASS,
-  SELECT_CLASSES,
-  STAT_CARD,
-  STATS,
-  STATS_GRID,
-  TAB_ACTIVE,
-  TAB_BASE,
-  TAB_INACTIVE,
-  TABS_WRAPPER,
-  VALUE_CLASS,
-  WRAPPER,
-} from "../assets/dummy";
+
 import {
   Calendar1Icon,
   CalendarIcon,
   Filter,
   HomeIcon,
+  Flame,
   Plus,
 } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
@@ -31,7 +13,56 @@ import TaskItem from "../components/TaskItem";
 import axios from "axios";
 import TaskModal from "../components/TaskModal";
 
+const FILTER_LABELS = {
+  all: "All Tasks",
+  today: "Today's Tasks",
+  week: "This Week",
+  high: "High Priority",
+  medium: "Medium Priority",
+  low: "Low Priority",
+};
+
+const STATS = [
+  {
+    key: "total",
+    label: "Total Tasks",
+    icon: HomeIcon,
+    iconColor: "bg-purple-100 text-purple-600",
+    valueKey: "total",
+    gradient: true,
+  },
+  {
+    key: "lowPriority",
+    label: "Low Priority",
+    icon: Flame,
+    iconColor: "bg-green-100 text-green-600",
+    borderColor: "border-green-100",
+    valueKey: "lowPriority",
+    textColor: "text-green-600",
+  },
+  {
+    key: "mediumPriority",
+    label: "Medium Priority",
+    icon: Flame,
+    iconColor: "bg-orange-100 text-orange-600",
+    borderColor: "border-orange-100",
+    valueKey: "mediumPriority",
+    textColor: "text-orange-600",
+  },
+  {
+    key: "highPriority",
+    label: "High Priority",
+    icon: Flame,
+    iconColor: "bg-red-100 text-red-600",
+    borderColor: "border-red-100",
+    valueKey: "highPriority",
+    textColor: "text-red-600",
+  },
+];
+
 const API_BASE = "http://localhost:5000/api/tasks";
+
+const FILTER_OPTIONS = ["all", "today", "week", "high", "medium", "low"];
 
 const Dashboard = () => {
   const { tasks, refreshTasks } = useOutletContext();
@@ -113,9 +144,9 @@ const Dashboard = () => {
   );
 
   return (
-    <div className={WRAPPER}>
+    <div className="p-4 md:p-6 min-h-screen overflow-hidden">
       {/* header */}
-      <div className={HEADER}>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 md:mb-6 gap-3">
         <div className="min-w-0">
           <h1 className="text-xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
             <HomeIcon className="text-purple-500 w-5 h-5 md:w-6 md:h-6 shrink-0" />
@@ -125,14 +156,17 @@ const Dashboard = () => {
             Manage your tasks efficiently
           </p>
         </div>
-        <button onClick={() => setShowModal(true)} className={ADD_BUTTON}>
+        <button
+          onClick={() => setShowModal(true)}
+          className="flex items-center gap-2 bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 w-full md:w-auto justify-center text-sm md:text-base"
+        >
           <Plus size={18} />
           Add New Task
         </button>
       </div>
 
       {/* stats */}
-      <div className={STATS_GRID}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-4 md:mb-6">
         {STATS.map(
           ({
             key,
@@ -144,15 +178,18 @@ const Dashboard = () => {
             textColor,
             gradient,
           }) => (
-            <div key={key} className={`${STAT_CARD} ${borderColor}`}>
+            <div
+              key={key}
+              className={`"p-3 md:p-4 rounded-xl bg-white shadow-sm border border-purple-100 hover:shadow-md transition-all duration-300 min-w-0" ${borderColor}`}
+            >
               <div className="flex items-center gap-2 md:gap-3">
-                <div className={`${ICON_WRAPPER} ${iconColor}`}>
+                <div className={`"p-1.5 md:p-2 rounded-lg" ${iconColor}`}>
                   <Icon className="w-4 h-4 md:w-5 md:h-5" />
                 </div>
 
                 <div className="min-w-0">
                   <p
-                    className={`${VALUE_CLASS} ${
+                    className={`"text-lg md:text-2xl font-bold truncate" ${
                       gradient
                         ? "bg-gradient-to-r from-fuchsia-500 to-purple-600 bg-clip-text text-transparent"
                         : textColor
@@ -160,7 +197,7 @@ const Dashboard = () => {
                   >
                     {stats[valueKey]}
                   </p>
-                  <p className={LABEL_CLASS}>{label}</p>
+                  <p className="text-xs text-gray-500 truncate">{label}</p>
                 </div>
               </div>
             </div>
@@ -170,7 +207,7 @@ const Dashboard = () => {
       {/* CONTENTS */}
       <div className="space-y-6">
         {/* filter */}
-        <div className={FILTER_WRAPPER}>
+        <div className="flex items-center justify-between bg-white p-4 rounded-xl shadow-sm">
           <div className="flex items-center gap-2 min-w-0">
             <Filter className="w-5 h-5 text-purple-500 shrink-0" />
             <h2 className="text-base md:text-lg font-semibold text-gray-800 truncate">
@@ -180,7 +217,7 @@ const Dashboard = () => {
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className={SELECT_CLASSES}
+            className="px-3 py-2 border border-purple-100 rounded-lg focus:ring-2 focus:ring-purple-500 md:hidden text-sm"
           >
             {FILTER_OPTIONS.map((opt) => (
               <option key={opt} value={opt}>
@@ -189,13 +226,15 @@ const Dashboard = () => {
             ))}
           </select>
 
-          <div className={TABS_WRAPPER}>
+          <div className="hidden md:flex space-x-1 bg-purple-50 p-1 rounded-lg">
             {FILTER_OPTIONS.map((opt) => (
               <button
                 key={opt}
                 onClick={() => setFilter(opt)}
-                className={`${TAB_BASE} ${
-                  filter === opt ? TAB_ACTIVE : TAB_INACTIVE
+                className={`"px-3 py-1.5 rounded-lg text-xs font-medium transition-all" ${
+                  filter === opt
+                    ? "bg-white text-purple-700 shadow-sm border"
+                    : "text-gray-600 hover:bg-purple-100/50"
                 }`}
               >
                 {opt.charAt(0).toUpperCase() + opt.slice(1)}
@@ -206,8 +245,8 @@ const Dashboard = () => {
         {/* tasklist */}
         <div className="space-y-4">
           {filteredTasks.length === 0 ? (
-            <div className={EMPTY_STATE.wrapper}>
-              <div className={EMPTY_STATE.iconWrapper}>
+            <div className="p-6 bg-white rounded-xl shadow-sm border border-purple-100 text-center">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CalendarIcon className="w-8 h-8 text-purple-500" />
               </div>
               <h3 className="text-lg font-semibold text-gray-800 mb-2">
@@ -220,7 +259,7 @@ const Dashboard = () => {
               </p>
               <button
                 onClick={() => setShowModal(true)}
-                className={EMPTY_STATE.btn}
+                className="px-4 py-2 bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white rounded-lg text-sm font-medium"
               >
                 Add New Task
               </button>
