@@ -23,8 +23,8 @@ const DEFAULT_TASK = {
 
 const priorityStyles = {
   Low: "bg-green-100 text-green-700 border-green-200",
-  Medium: "bg-purple-100 text-purple-700 border-purple-200",
-  High: "bg-fuchsia-100 text-fuchsia-700 border-fuchsia-200",
+  Medium: "bg-orange-100 text-orange-700 border-orange-200",
+  High: "bg-red-100 text-red-700 border-red-200",
 };
 
 const TaskModal = ({ isOpen, onClose, tasktoEdit, onSave, onLogout }) => {
@@ -109,23 +109,24 @@ const TaskModal = ({ isOpen, onClose, tasktoEdit, onSave, onLogout }) => {
 
   return (
     <div className="fixed inset-0 backdrop-blur-sm bg-black/20 z-50 flex items-center justify-center p-4">
-      <div className="bg-white border border-purple-100 rounded-xl max-w-md w-full shadow-lg p-6 relative animate-fadeIn">
+      <div className="bg-white border border-pink-100 rounded-xl max-w-md w-full shadow-lg p-6 relative animate-fadeIn">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
             {taskData.id ? (
-              <Save className="text-purple-500 w-5 h-5 " />
+              <Save className="text-pink-500 w-5 h-5 " />
             ) : (
-              <PlusCircle className="text-purple-500 w-5 h-5" />
+              <PlusCircle className="text-pink-500 w-5 h-5" />
             )}
             {taskData.id ? "Edit task" : "Create New Task"}
           </h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-purple-100 rounded-lg transition-colors text-gray-500 hover:text-purple-700"
+            className="p-2 hover:bg-pink-100 rounded-lg transition-colors text-gray-500 hover:text-pink-700"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
+
         {/* FORM TO FILL TO CREATE A NEW TASK */}
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
@@ -133,11 +134,12 @@ const TaskModal = ({ isOpen, onClose, tasktoEdit, onSave, onLogout }) => {
               {error}
             </div>
           )}
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Task title
             </label>
-            <div className="flex items-center border border-purple-100 rounded-lg px-3 py-2.5 focus-within:ring-2 focus-within:ring-purple-500 focus-within:border-purple-500 transition-all duration-200">
+            <div className="flex items-center border border-pink-100 rounded-lg px-3 py-2.5 focus-within:ring-2 focus-within:ring-pink-500 focus-within:border-pink-500 transition-all duration-200 hover:border-pink-200">
               <input
                 type="text"
                 name="title"
@@ -149,9 +151,10 @@ const TaskModal = ({ isOpen, onClose, tasktoEdit, onSave, onLogout }) => {
               />
             </div>
           </div>
+
           <div>
             <label className="flex items-center gap-1 text-sm font-medium text-gray-700 mb-1">
-              <AlignLeft className="w-4 h-4 text-purple-500" />
+              <AlignLeft className="w-4 h-4 text-pink-500" />
               Description
             </label>
             <textarea
@@ -159,21 +162,22 @@ const TaskModal = ({ isOpen, onClose, tasktoEdit, onSave, onLogout }) => {
               rows="3"
               onChange={handleChange}
               value={taskData.description}
-              className="w-full px-4 py-2.5 border border-purple-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm"
+              className="w-full px-4 py-2.5 border border-pink-100 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-sm hover:border-pink-200 transition-all duration-200"
               placeholder="Add details about your task"
             />
           </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="flex items-center gap-1 text-sm font-medium text-gray-700 mb-1">
-                <Flag className="w-4  h-4 text-purple-500" />
+                <Flag className="w-4 h-4 text-pink-500" />
                 Priority
               </label>
               <select
                 name="priority"
                 value={taskData.priority}
                 onChange={handleChange}
-                className={`"w-full px-4 py-2.5 border border-purple-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm" ${
+                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-sm hover:border-pink-200 transition-all duration-200 ${
                   priorityStyles[taskData.priority]
                 }`}
               >
@@ -182,9 +186,10 @@ const TaskModal = ({ isOpen, onClose, tasktoEdit, onSave, onLogout }) => {
                 <option>High</option>
               </select>
             </div>
+
             <div>
               <label className="flex items-center gap-1 text-sm font-medium text-gray-700 mb-1">
-                <Calendar className="w-4  h-4 text-purple-500" />
+                <Calendar className="w-4 h-4 text-pink-500" />
                 Due Date
               </label>
               <input
@@ -194,42 +199,51 @@ const TaskModal = ({ isOpen, onClose, tasktoEdit, onSave, onLogout }) => {
                 min={today}
                 value={taskData.dueDate}
                 onChange={handleChange}
-                className="w-full px-4 py-2.5 border border-purple-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm"
+                className="w-full px-4 py-2.5 border border-pink-100 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-sm hover:border-pink-200 transition-all duration-200"
               />
             </div>
           </div>
 
           <div>
             <label className="flex items-center gap-1 text-sm font-medium text-gray-700 mb-2">
-              <CheckCircle className="w-4  h-4 text-purple-500" />
+              <CheckCircle className="w-4 h-4 text-pink-500" />
               Status
             </label>
             <div className="flex gap-4">
               {[
-                { val: "Yes", label: " Completed" },
+                { val: "Yes", label: "Completed" },
                 { val: "No", label: "In progress" },
               ].map(({ val, label }) => (
-                <label key={val} className="flex items-center">
+                <label
+                  key={val}
+                  className="flex items-center cursor-pointer group"
+                >
                   <input
                     type="radio"
                     name="completed"
                     value={val}
                     checked={taskData.completed === val}
                     onChange={handleChange}
-                    className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded cursor-pointer"
                   />
-                  <span className="ml-2 text-sm text-gray-700">{label}</span>
+                  <span className="ml-2 text-sm text-gray-700 group-hover:text-pink-600 transition-colors duration-200">
+                    {label}
+                  </span>
                 </label>
               ))}
             </div>
           </div>
+
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white font-medium py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50 hover:shadow-md transition-all duration-200"
+            className="w-full bg-gradient-to-r from-pink-400 to-pink-500 text-white font-medium py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50 hover:shadow-md hover:from-pink-500 hover:to-pink-600 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
           >
             {loading ? (
-              "Saving..."
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                Saving...
+              </div>
             ) : taskData.id ? (
               <>
                 <Save className="w-4 h-4" />

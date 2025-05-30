@@ -16,7 +16,7 @@ const Layout = ({ user, onLogout }) => {
 
     try {
       const token = localStorage.getItem("token");
-      if (!token) throw new Error("no auth token found");
+      if (!token) throw new Error("No auth token found");
 
       const res = await axios.get("http://localhost:5000/api/tasks/gp", {
         headers: { Authorization: `Bearer ${token}` },
@@ -35,7 +35,7 @@ const Layout = ({ user, onLogout }) => {
       setTasks(arr);
     } catch (err) {
       console.error(err);
-      setError(err.message || "could not load tasks");
+      setError(err.message || "Could not load tasks");
       if (err.response?.status === 401) {
         onLogout();
       }
@@ -64,72 +64,75 @@ const Layout = ({ user, onLogout }) => {
     return { totalCount, completedTasks, pendingTasks, completionPercentage };
   }, [tasks]);
 
-  // statistics card
+  // Statistics card component
   const StatCard = ({ title, value, icon }) => (
-    <div className="p-2 sm:p-3 rounded-xl bg-white shadow-sm border border-purple-100 hover:shadow-md transition-all duration-300 hover:border-purple-100 group">
-      <div className="flex items-center gap-2 ">
-        <div className=" p-1.5 rounded-lg bg-gradient-to-br from-fuchsia-500/10 to-purple-500/10 group-hover:from-fuchsia-500/20 group-hover:to-purple-500/20">
+    <div className="p-2 sm:p-3 rounded-xl bg-white shadow-sm border border-pink-100 hover:shadow-md transition-all duration-300 hover:border-pink-200 group">
+      <div className="flex items-center gap-2">
+        <div className="p-1.5 rounded-lg bg-gradient-to-br from-pink-400/10 to-pink-500/10 group-hover:from-pink-400/20 group-hover:to-pink-500/20">
           {icon}
         </div>
-        <div className=" min-w-0">
-          <p className="text-lg sm:text-xl font-bold bg-gradient-to-r from-fuchsia-500 to-purple-600 bg-clip-text text-transparent">
+        <div className="min-w-0">
+          <p className="text-lg sm:text-xl font-bold bg-gradient-to-r from-pink-400 to-pink-500 bg-clip-text text-transparent">
             {value}
           </p>
-          <p className=" text-xs text-gray-500 font-medium ">{title}</p>
+          <p className="text-xs text-gray-500 font-medium">{title}</p>
         </div>
       </div>
     </div>
   );
 
-  //LOADING
+  // Loading state
   if (loading)
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-100" />
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-400" />
       </div>
     );
 
-  //ERROR
+  // Error state
   if (error)
     return (
-      <div className="min-h-screen bg-gray-50 p-6 flex items-center justify-center ">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-pink-100 p-6 flex items-center justify-center">
         <div className="bg-red-50 text-red-600 p-4 rounded-xl border border-red-100 max-w-md">
           <p className="font-medium mb-2">Error loading tasks</p>
           <p className="text-sm">{error}</p>
           <button
             onClick={fetchTasks}
-            className="mt-4 py-2 px-4 bg-red-100 text-red-700 rounded-lg test-sm font-medium hover:bg-red-200 trasition-colors"
+            className="mt-4 py-2 px-4 bg-red-100 text-red-700 rounded-lg text-sm font-medium hover:bg-red-200 transition-colors"
           >
-            {" "}
-            Try again
+            Try Again
           </button>
         </div>
       </div>
     );
 
   return (
-    <div className=" min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-pink-100">
       <Navbar user={user} onLogout={onLogout} />
       <Sidebar user={user} tasks={tasks} />
 
-      <div className="ml-0 xl:ml-64 lg:ml-64 md-ml-16 pt-16 p-3 sm:p-4 md:p-4 transition-all duration-300">
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm-gap-6">
+      <div className="ml-0 xl:ml-64 lg:ml-64 md:ml-16 pt-16 p-3 sm:p-4 md:p-4 transition-all duration-300">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6">
           <div className="xl:col-span-2 space-y-3 sm:space-y-4">
             <Outlet context={{ tasks, refreshTasks: fetchTasks }} />
           </div>
-          <div className=" xl:col-span-1 space-y-4 sm-space-y-6">
-            <div className="bg-white rounded-xl p-4 sm:p-5 shadow-sm border border-purple-100">
-              <h3 className=" text-base sm:text-lg font-semibold mb-3 sm:md-4 text-gray-800 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-purple-500" />
-                Tasks statistics
+
+          <div className="xl:col-span-1 space-y-4 sm:space-y-6">
+            {/* Task Statistics Section */}
+            <div className="bg-white rounded-xl p-4 sm:p-5 shadow-sm border border-pink-100">
+              <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-gray-800 flex items-center gap-2">
+                <div className="w-6 h-6 bg-pink-100 rounded-lg flex items-center justify-center">
+                  <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-pink-500" />
+                </div>
+                Task Statistics
               </h3>
 
-              <div className=" grid gird-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <StatCard
-                  title="Total tasks"
+                  title="Total Tasks"
                   value={stats.totalCount}
                   icon={
-                    <Circle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-500" />
+                    <Circle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-pink-500" />
                   }
                 />
                 <StatCard
@@ -143,35 +146,36 @@ const Layout = ({ user, onLogout }) => {
                   title="Pending"
                   value={stats.pendingTasks}
                   icon={
-                    <Circle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-fuchsia-500" />
+                    <Circle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-pink-400" />
                   }
                 />
                 <StatCard
-                  title="Completion rate"
-                  value={`${stats.completionPercentage} %`}
+                  title="Completion Rate"
+                  value={`${stats.completionPercentage}%`}
                   icon={
-                    <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-500" />
+                    <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-pink-500" />
                   }
                 />
               </div>
-              <hr className="my-3 sm:my-4 border-purple-100" />
+
+              <hr className="my-3 sm:my-4 border-pink-100" />
 
               <div className="space-y-2 sm:space-y-3">
                 <div className="flex items-center justify-between text-gray-700">
                   <span className="text-xs sm:text-sm font-medium flex items-center gap-1.5">
-                    <Circle className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-purple-500 fill-purple-500" />
-                    Task progress
+                    <Circle className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-pink-500 fill-pink-500" />
+                    Task Progress
                   </span>
-                  <span className="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 sm:px-2 rounded-full">
+                  <span className="text-xs bg-pink-100 text-pink-700 px-1.5 py-0.5 sm:px-2 rounded-full font-medium">
                     {stats.completedTasks}/{stats.totalCount}
                   </span>
                 </div>
 
-                <div className=" relative pt-1">
+                <div className="relative pt-1">
                   <div className="flex gap-1.5 items-center">
-                    <div className="flex-1 h-2 sm:h-3 bg-purple-100 rounded-full overflow-hidden">
+                    <div className="flex-1 h-2 sm:h-3 bg-pink-100 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-fuchsia-500 to-purple-600 transition-all duration-500"
+                        className="h-full bg-gradient-to-r from-pink-400 to-pink-500 transition-all duration-500"
                         style={{ width: `${stats.completionPercentage}%` }}
                       />
                     </div>
@@ -180,16 +184,20 @@ const Layout = ({ user, onLogout }) => {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl p-4 sm:p-5 shadow-sm border border-purple-100">
-              <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-gray-800 flex items-center gap-2 ">
-                <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-purple-500" />
-                Recent activity
+            {/* Recent Activity Section */}
+            <div className="bg-white rounded-xl p-4 sm:p-5 shadow-sm border border-pink-100">
+              <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-gray-800 flex items-center gap-2">
+                <div className="w-6 h-6 bg-pink-100 rounded-lg flex items-center justify-center">
+                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-pink-500" />
+                </div>
+                Recent Activity
               </h3>
+
               <div className="space-y-2 sm:space-y-3">
                 {tasks.slice(0, 3).map((task) => (
                   <div
                     key={task._id || task.id}
-                    className="flex items-center justify-between p-2 sm:p-3 hover:bg-purple-50/50 rounded-lg transition-colors duration-200 border border-transparent hover:border-purple-100"
+                    className="flex items-center justify-between p-2 sm:p-3 hover:bg-pink-50/50 rounded-lg transition-colors duration-200 border border-transparent hover:border-pink-100"
                   >
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-700 break-words whitespace-normal">
@@ -202,10 +210,10 @@ const Layout = ({ user, onLogout }) => {
                       </p>
                     </div>
                     <span
-                      className={`px-2 py-1 text-xs rounded-full shrink-0 ml-2 ${
+                      className={`px-2 py-1 text-xs rounded-full shrink-0 ml-2 font-medium ${
                         task.completed
                           ? "bg-green-100 text-green-700"
-                          : "bg-fuchsia-100 text-fuchsia-700"
+                          : "bg-pink-100 text-pink-700"
                       }`}
                     >
                       {task.completed ? "Done" : "Pending"}
@@ -215,12 +223,14 @@ const Layout = ({ user, onLogout }) => {
 
                 {tasks.length === 0 && (
                   <div className="text-center py-4 sm:py-6 px-2">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto sm:mb-4 rounded-full bg-purple-100 flex items-center justify-center">
-                      <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-purple-500" />
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 rounded-full bg-pink-100 flex items-center justify-center">
+                      <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-pink-500" />
                     </div>
-                    <p className="text-sm text-gray-500">No recent activity</p>
+                    <p className="text-sm text-gray-500 font-medium">
+                      No recent activity
+                    </p>
                     <p className="text-xs text-gray-400 mt-1">
-                      Tasks will appear here
+                      Tasks will appear here once created
                     </p>
                   </div>
                 )}
